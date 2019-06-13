@@ -15,12 +15,19 @@ import com.fengzhi.rxjava2demo66.base.NetworkConfig;
 import com.fengzhi.rxjava2demo66.R;
 import com.fengzhi.rxjava2demo66.base.PreHandleNoNetInterceptor;
 import com.fengzhi.rxjava2demo66.bean.Androidbean;
+import com.fengzhi.rxjava2demo66.di.Cloth;
+import com.fengzhi.rxjava2demo66.di.ClothHandler;
+import com.fengzhi.rxjava2demo66.di.DaggerRxComponent;
+import com.fengzhi.rxjava2demo66.di.RxComponent;
+import com.fengzhi.rxjava2demo66.di.RxModule;
 import com.fengzhi.rxjava2demo66.net.RetrofitManager;
 import com.fengzhi.rxjava2demo66.normal.GankApi;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
+
+import javax.inject.Inject;
 
 import io.reactivex.Completable;
 import io.reactivex.CompletableObserver;
@@ -44,7 +51,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RxActivity extends AppCompatActivity {
 
     TextView textView;
+    TextView textviewdi;
     private GankApi gankApi;
+    @Inject
+    Cloth blueCloth;
+    @Inject
+    ClothHandler clothHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +64,10 @@ public class RxActivity extends AppCompatActivity {
         setContentView(R.layout.activity_rx);
         RetrofitManager.init(this);
         textView = findViewById(R.id.tvResult);
-
+        textviewdi = findViewById(R.id.textviewdi);
+        RxComponent build = DaggerRxComponent.builder().rxModule(new RxModule()).build();
+        build.inject(this);
+        textviewdi.setText("蓝布料加工后变成了" + clothHandler.handle(blueCloth) + "\nclothHandler地址:" + clothHandler);
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
 //        自动追加参数
 //        builder.addInterceptor(new PreHandleNoNetInterceptor(this));//按照顺序执行拦截器
