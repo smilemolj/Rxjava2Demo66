@@ -14,7 +14,7 @@ import retrofit2.http.Path;
 import retrofit2.http.Url;
 
 public interface GankApi {
-    @GET("api/data/{category}/{size}/{page}")
+    @GET("api/data/"+"{category}/{size}/{page}")
     Call<Androidbean> getData(@Path("category") String category, @Path("size") String size,
                               @Path("page") String page);
 
