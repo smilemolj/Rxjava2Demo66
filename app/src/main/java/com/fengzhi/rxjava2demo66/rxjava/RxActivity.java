@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fengzhi.rxjava2demo66.App;
 import com.fengzhi.rxjava2demo66.base.AppendBodyParamsInterceptor;
 import com.fengzhi.rxjava2demo66.base.AppendHeaderParamInterceptor;
 import com.fengzhi.rxjava2demo66.base.AppendUrlParamInterceptor;
@@ -22,6 +23,7 @@ import com.fengzhi.rxjava2demo66.di.RxComponent;
 import com.fengzhi.rxjava2demo66.di.RxModule;
 import com.fengzhi.rxjava2demo66.net.RetrofitManager;
 import com.fengzhi.rxjava2demo66.normal.GankApi;
+import com.fengzhi.rxjava2demo66.normal.NormalActivity;
 
 import java.io.File;
 import java.io.IOException;
@@ -42,8 +44,11 @@ import okhttp3.CacheControl;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.Response;
+import okhttp3.ResponseBody;
 import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -52,6 +57,7 @@ public class RxActivity extends AppCompatActivity {
 
     TextView textView;
     TextView textviewdi;
+    private GankApi gankApi1;
     private GankApi gankApi;
     @Inject
     Cloth blueCloth;
@@ -68,7 +74,7 @@ public class RxActivity extends AppCompatActivity {
         RxComponent build = DaggerRxComponent.builder().rxModule(new RxModule()).build();
         build.inject(this);
         textviewdi.setText("蓝布料加工后变成了" + clothHandler.handle(blueCloth) + "\nclothHandler地址:" + clothHandler);
-        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+//        OkHttpClient.Builder builder = new OkHttpClient.Builder();
 //        自动追加参数
 //        builder.addInterceptor(new PreHandleNoNetInterceptor(this));//按照顺序执行拦截器
 //        builder.addInterceptor(new AppendUrlParamInterceptor());
@@ -78,22 +84,22 @@ public class RxActivity extends AppCompatActivity {
 
 
         //设置超时
-        builder.connectTimeout(60, TimeUnit.SECONDS);
-        builder.readTimeout(60, TimeUnit.SECONDS);
-        builder.writeTimeout(60, TimeUnit.SECONDS);
+//        builder.connectTimeout(60, TimeUnit.SECONDS);
+//        builder.readTimeout(60, TimeUnit.SECONDS);
+//        builder.writeTimeout(60, TimeUnit.SECONDS);
 //        错误重连
-        builder.retryOnConnectionFailure(true);
+//        builder.retryOnConnectionFailure(true);
 
 //        okhttp的log信息拦截器
-        if (NetworkConfig.DEBUG) {
-            HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
-            httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-            builder.addInterceptor(httpLoggingInterceptor);
-        }
+//        if (NetworkConfig.DEBUG) {
+//            HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
+//            httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+//            builder.addInterceptor(httpLoggingInterceptor);
+//        }
 
 
         gankApi = GankRetrofit.getGankapi();
-
+        gankApi1=App.getInstance().getRetrofit().create(GankApi.class);
     }
 
     public void getdata(View view) {
@@ -155,5 +161,20 @@ public class RxActivity extends AppCompatActivity {
 
     public void btnRemoveWrapper(View view) {
 
+    }
+
+    public void postdata1(View view) {
+        gankApi1.postData("http://square.github.io/retrofit", "测试", "大佬", "android", "true").enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                Toast.makeText(RxActivity.this, "请求成功", Toast.LENGTH_SHORT).show();
+                textView.setText(response.body().toString());
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(RxActivity.this, "请求失败", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

@@ -42,4 +42,6 @@ dependencies {
     annotationProcessor 'com.google.dagger:dagger-compiler:2.22.1'
     implementation 'com.google.dagger:dagger-android:2.22.1'
     annotationProcessor 'com.google.dagger:dagger-android-processor:2.22.1'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-alpha-2'
+
 }
