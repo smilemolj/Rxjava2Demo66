@@ -2,31 +2,18 @@ package com.fengzhi.rxjava2demo66;
 
 import android.app.Application;
 
-import com.fengzhi.rxjava2demo66.base.AppendBodyParamsInterceptor;
-import com.fengzhi.rxjava2demo66.base.AppendHeaderParamInterceptor;
-import com.fengzhi.rxjava2demo66.base.AppendUrlParamInterceptor;
-import com.fengzhi.rxjava2demo66.base.NetWorkUtil;
 import com.fengzhi.rxjava2demo66.base.NetworkConfig;
-import com.fengzhi.rxjava2demo66.base.PreHandleNoNetInterceptor;
-import com.fengzhi.rxjava2demo66.normal.GankApi;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-import okhttp3.Cache;
-import okhttp3.CacheControl;
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class App extends Application {
-    public static App instance;
-    public static Retrofit retrofitInstance;
+    private static App instance;
+    private static Retrofit retrofitInstance;
 
     public static App getInstance() {
         return instance;
